@@ -1,9 +1,17 @@
 version: "3"
 services:
-  jenkins-master:
+  master:
     container_name: jenkins-master
     image: jenkins/jenkins
     ports:
       - 8080:8080
     volumes:
       - ./jenkins_home:/var/jenkins_home
+    links:
+      - slave01
+
+slave01:
+  container_name: slave01
+  image: jenkins/ssh-slave
+  environment:
+    - JENKINS_SLAVE_SSH_PUBKEY=ssh-rsa
