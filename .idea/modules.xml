@@ -3,6 +3,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/docker-basics/docker-basics.iml" filepath="$PROJECT_DIR$/docker-basics/docker-basics.iml" />
+      <module fileurl="file://$PROJECT_DIR$/docker-basics-assignment/docker-basics-assignment.iml" filepath="$PROJECT_DIR$/docker-basics-assignment/docker-basics-assignment.iml" />
     </modules>
   </component>
 </project>

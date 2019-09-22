@@ -112,10 +112,10 @@
      ```
   5) Test  
      + 브라우저로 접근: http://localhost:8080   
-     <img src="./md-images/00001.png" width="500px" />
+     <img src="./assets/00001.png" width="500px" />
      
      + 젠킨스 홈 화면  
-     <img src="./md-images/00002.png" width="500px" />
+     <img src="./assets/00002.png" width="500px" />
        
      Volume 디렉토리 ./jenkins_home 젠킨스 홈 확인할 것.
      
