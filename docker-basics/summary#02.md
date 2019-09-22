@@ -4,18 +4,47 @@
 ### 2-1. Execute Application as Container
 
 #### 1. __Create Simple Echo Server with Node.js__
-  1) Create Directory /Docker-Practices/hellodocker
+  1) Create Directory /docker-practices/docker-basics/hellodocker
   2) Write server.js
+     ```js
+     var http = require('http');
+     
+     var port = 3000;
+     
+     var server =  http.createServer( function( request, response ) {
+         console.log( "request[" + request.url + "] received");
+         response.writeHead( 200, {
+             "Content-Type": "text/html"
+         });
+         response.end(  "Hello Docker\n"  );
+     
+     } );
+     
+     server.listen( port, function() {
+         var addr = server.address();
+         var bind = typeof addr === 'string' ? 'pipe ' + addr : 'port ' + addr.port;
+         console.debug('Listening on ' + bind);
+     });
+     ```
 
 #### 2. __Write Dockerfile__
-  1) Instruction  
+  1) Dockerfile
+     ```
+     FROM node:10-alpine 
+     
+     RUN  mkdir /hellodocker
+     COPY server.js /hellodocker
+     
+     CMD  node /hellodocker/server.js
+     ``` 
+  2) Instruction  
      
      FROM : docker image의 base image를 지정  
      RUN  : docker image를 빌드핧 때 container 안에서 실행할 명령을 정의  
      COPY : host machine의 file이나 directory를 container 안으로 복사 (cf. ADD)  
      CMD  : docker container를 실행할 때 container 안의 실행 할 process를 지정 (cf. CMD 명령 오버라이드)  
 
-  2) Other Instructions
+  3) Other Instructions
 
      LABEL :  
      ENV   :  
@@ -24,7 +53,7 @@
 #### 3. __Build Docker Image__
   1) Build  
      ```bash
-     $ docker image build -t hellodocker:latest .
+     $ docker image build -t kickscar/hellodocker:latest .
      ```
 
   2) Options  
@@ -40,7 +69,7 @@
 #### 4. __Run Docker Container__
   1) Run    
      ```bash
-     $ docker container run -t -p 3000:3000 hellodocker
+     $ docker container run -t -p 3000:3000 kickscar/hellodocker
      ```
   2) Options  
      -d: daemon, background 실행 (기본적으로 foreground 실행)  
@@ -103,7 +132,7 @@
 #### 6. __이미지 ID에 태그 부여하기__
   1) 기본 사용 예
      ```bash
-     $ docker tag hellodocker:latest kickscar/hellodocker:latest
+     $ docker tag kickscar/hellodocker:latest kickscar/echo:latest
      ```
 ##### 7. __이미지를 외부에 공개하기(Docker Hub 등록)__
   1) 기본 사용 예
@@ -219,7 +248,7 @@
 ##### 9. __컨테이너 파기__
   1) 기본 명령
      ```bash
-     $ docker container rm CONTAINER_ID 또는 CONTAINER_NAME (여러개도 가능)
+     $ docker container rm [CONTAINER-ID|CONTAINER-NAME] (여러개도 가능)
      ```
   2) Options     
      -f  
@@ -228,7 +257,7 @@
 ##### 10. __표준 출력 연결하기__
   1) 기본 명령
      ```bash
-     $ docker container logs [options] CONTAINER_ID 또는 CONTAINER_NAME
+     $ docker container logs [options] [CONTAINER-ID|CONTAINER-NAME]
      ```
   2) Options   
      -f  

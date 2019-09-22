@@ -19,7 +19,7 @@
     ```
 
 #### 1-3. Build Docker Image(helloworld)
-1. __Make Directory Docker-Practices/helloworld__
+1. __Make Directory /docker-practices/docker-basics/helloworld__
 2. __Script helloworld.sh__
 3. __Build Image__  
     ```bash
