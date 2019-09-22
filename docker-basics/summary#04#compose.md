@@ -44,7 +44,7 @@
      
 #### 2. __practice02: 이미지 빌드와 함께 여러 컨테이너 실행__
   1) Create Directory /docker-practices/docker-basics/hellodocker-compose-build
-  2) Must be Dockerfile, server.js in Directory
+  2) Dockerfile, server.js exists in Directory
   2) Write docker-compose.yml
      ```yml
      version: "3"
@@ -80,7 +80,7 @@
      services:
         jenkins-master:
            container_name: jenkins-master
-           image: jenkinsci/jenkins:2.142-slim
+           image: jenkins/jenkins
            ports:
               - 8080:8080
            volumes:
@@ -109,8 +109,9 @@
      docker container ls
      ```
   5) Test  
-     브라우저로 접근  
-     <img src="./md-images/00001.png" width="100px" />
-
+     브라우저로 접근: http://localhost:8080 
+     <img src="./md-images/00001.png" width="400px" />
+     <img src="./md-images/00001.png" width="400px" />
+     Volume 디렉토리 ./jenkins_home 젠킨스 홈 확인할 것.
      
 #### 2. __practice02: Jenkins Master/Slave Node 2개 Containers 동시 실행

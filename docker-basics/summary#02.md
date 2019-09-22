@@ -144,8 +144,7 @@
      $ docker login -u kickscar -p
      ```
 
-
-#### 2-3. 도커 컨테이너 다루기
+### 2-3. Working with Docker Container
 
 ##### 1. __Life Circle of Container__
   1) 상태 
