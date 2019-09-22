@@ -2,9 +2,11 @@
 
 
 ### 4-1. What is Docker Compose?
-  1) 여러 컨테이너들의 실행을 한번에 관리해주는 Docker Management Tool
-  2) Fig라는 이름으로 개발된 관리 도구
-  3) 보통 시스템은 여러 컨테이너들 간에 서로 통신과 연동으로 구축된다.
+  1) 보통 시스템은 여러 컨테이너들 간의 통신과 연동으로 구성.
+  2) 여러 컨테이너들의 실행을 한번에 관리해주는 Docker Management Tool  
+     (Tool for defining and running multi-container Docker applications)
+  3) Using a YAML file to configure application's services
+  4) Strting Project is Development of Docker Management Tool 'Fig'
 
 #### 1. __practice01: Docker Compose 명령으로 여러 컨테이너 실행__
   1) Create Directory /docker-practices/docker-basics/hellodocker-compose
