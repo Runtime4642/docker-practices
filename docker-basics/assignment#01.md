@@ -2,7 +2,7 @@
 2 개의 컨데이너 이미지를 빌드하고 연동시키는 과제입니다.
 
 matser : Tomcat WAS
-links  : Oracle
+links  : Oracle/XE
 
 application : mysite3(Spring MVC 4.x, Java Config)
 application Build Tools: Maven
