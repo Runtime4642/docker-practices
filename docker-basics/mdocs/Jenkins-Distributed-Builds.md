@@ -35,9 +35,8 @@
 #### 7. Load Balancing: Scheduling strategy
 
 =====================================================================  
-1. Example Practice 필요  
-2. Docker Compose 한 다음의 Docker 교육?  
-   아니면, 그 전 선행 Jenkins 교육(8시간)?   
+1. Example Practice
+2. 그 전 선행 Jenkins Master/Slave Archi 이해
   
 
 

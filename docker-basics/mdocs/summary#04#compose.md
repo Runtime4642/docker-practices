@@ -119,5 +119,104 @@
        
      Volume 디렉토리 ./jenkins_home 젠킨스 홈 확인할 것.
      
-     
 #### 2. __practice02: Jenkins Master/Slave Node 2개 Containers 동시 실행__
+
+  1) Generate Master Jenkins's SSH Key
+    
+     Master에서 Slave에 Agent 실행은 SSH Tunneling on Unix 방법을 사용한다.
+     
+     ```ssh
+     $ docker container exec -it jenkins-master sh
+     $ ssh-keygen -t rsa -C ""
+     Generating public/private rsa key pair.
+     Enter file in which to save the key (/var/jenkins_home/.ssh/id_rsa): 
+     Created directory '/var/jenkins_home/.ssh'.
+     Enter passphrase (empty for no passphrase): 
+     Enter same passphrase again: 
+     Your identification has been saved in /var/jenkins_home/.ssh/id_rsa.
+     Your public key has been saved in /var/jenkins_home/.ssh/id_rsa.pub.
+     The key fingerprint is:
+     SHA256:SIbcFwbkR4uUkxbxTqzdJU4MMxew1i/uqnfRYdrHWQE 
+     The key's randomart image is:
+     +---[RSA 2048]----+
+     |     .**O.o. E.  |
+     |   . ==* @     . |
+     |    o.*.X = .   .|
+     |     o X + +o   .|
+     |      o S +=.o o |
+     |         .o.o +  |
+     |          .. .   |
+     |        ...      |
+     |      .o.o.      |
+     +----[SHA256]-----+
+     $ exit
+     ```
+     
+  2) Create Slave Jenkins Container
+     ```ssh
+     version: "3"
+     services:
+       master:
+         container_name: jenkins-master
+         image: jenkins/jenkins
+         ports:
+           - 8080:8080
+         volumes:
+           - ../jenkins-master-node/jenkins_home:/var/jenkins_home
+         links:
+           - slave01
+
+       slave01:
+         container_name: jenkins-slave01
+         image: jenkins/ssh-slave
+         environment:
+           - JENKINS_SLAVE_SSH_PUBKEY=ssh-rsa AAAAB3Nza .....     
+     ```
+     + 환경변수 JENKINS_SLAVE_SSH_PUBKEY 의 값 세팅      
+       값은 Volume으로 설정된 디렉토리의 /jenkins_home/.ssh/id_rsa.pub 의 내용이다.
+     + master가 slave를 어떻게 찾아 ssh로 agent를 실행하는 방법은 links를 통해 slave 컨테이너를 찾아 통신한다.  
+   
+  3) Run
+     ```ssh
+     $ docker-compose up -d
+     ```
+  4) Verify
+     ```ssh
+     $ docker container ls
+    
+     CONTAINER ID        IMAGE                    COMMAND                  CREATED             NAMES
+     8a760bb2a766        jenkins/jenkins          "/sbin/tini -- /usr/…"   3 minutes ago       jenkins-master
+     3e3517c52fc4        jenkins/ssh-slave        "setup-sshd"             3 minutes ago       jenkins-slave01
+     ```
+  5) Creating New Slave Node in Master Jenkins
+     + Jenkins Master 접속( http://localhost:8080 ) 
+     + Jenkins 관리 > 노드 관리
+     + 신규노드 메뉴를 눌러 slave01 를 추가       
+ 
+      <img src="./assets/00003.png" width="500px" />
+      
+     + 생성 후, slave01 노드 설정
+      
+      <img src="./assets/00004.png" width="500px" />
+      
+      Remote root directory : /home/jenkins  
+      Launch method : Launch agent agents via SSH  
+      Host : jenkins-slave01 (이름으로 slave 컨테이너를 찾기 때문에 IP대신 컨테이너 이름)  
+      Credentials : Jenkins 선택  
+      Host Key Verification Strategy : Non Verifying Verification Strategy  
+      
+      <img src="./assets/00005.png" width="500px" />
+      
+      Username : Jenkins
+      Private Key : /jenkins_home/.ssh/id_rsa 의 내용  
+      Add -> Credentials에서 jenkins를 선택  
+      Save  
+      
+      slave에 연결이 성공하면 Error가 없다.
+      
+      <img src="./assets/00006.png" width="500px" />
+       
+  6) Problems
+     + Master/Slave 컨테이너 작업에 운영자가 직접하는 Operation 이 다소 있다.
+     + 설정만을 통해 컨테이너 기동만으로 이와 같은 Operation을 생략할 수 있어야 한다.
+     
