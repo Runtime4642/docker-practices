@@ -22,11 +22,11 @@
    등과 같은 다양한 가상 컨테이너 환경에  젠킨스 업무를 분산(Distribution), 확장(Extention), 다중플랫폼지원(MutiPlatform)  
    지원에 시용한다.  
 
-#### 2. Understanding Master / Slave Architecture: How does this work?   
+#### 2. How does this work?(Understanding Master / Slave Architecture)  
 
 #### 3. Creating Slave Node
 
-#### 4. Different ways of starting agents
+#### 4. Different Ways of Starting Agents
 
 #### 5. Management of Jenkins Slave: Node Monitoring
 
@@ -34,9 +34,11 @@
 
 #### 7. Load Balancing: Scheduling strategy
 
-fucking a lot!!(존나많네!!!!)
-Example 만들기...
- 
+=====================================================================  
+1. Example Practice 필요  
+2. Docker Compose 한 다음의 Docker 교육?  
+   아니면, 그 전 선행 Jenkins 교육(8시간)?   
+  
 
 
    
