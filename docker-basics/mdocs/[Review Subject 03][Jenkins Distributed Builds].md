@@ -34,9 +34,6 @@
 
 #### 7. Load Balancing: Scheduling strategy
 
-=====================================================================  
-1. Example Practice
-2. 그 전 선행 Jenkins Master/Slave Archi 이해
   
 
 
