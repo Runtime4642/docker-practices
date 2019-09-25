@@ -150,7 +150,7 @@
      This node joined a swarm as a worker.
      / # exit
      ```
-  8) Verify 'hellodocker-swar' Swarm Cluster   
+  8) Verify 'hellodocker-swarm' Swarm Cluster   
      ```bash
      $ docker container exec -it hellodocker-manager sh
      / # docker node ls
