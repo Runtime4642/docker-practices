@@ -161,3 +161,109 @@
      abssnhoxe924c82u4rw0ngiz7 *   a21626a9507d   Ready    Active        Leader          18.05.0-ce
      / # exit
      ```
+  9) Register Image into Docker Registry (Operating Private Registry)
+     태그 붙이기   
+     ```bash
+     $ docker image tag kickscar/hellodocker:latest localhost:5000/kickscar/hellodocker:latest
+     ```
+     
+     등록하기
+     ```bash
+     $ docker image push localhost:5000/kickscar/hellodocker:latest
+     ```
+ 10) Downloading Image registered in Worker Host (Operating Private Registry)  
+      
+     Worker01 Host Container  
+     
+     ```bash
+     $ docker container exec -it hellodocker-worker01 sh
+     / # docker image pull hellodocker-registry:5000/kickscar/hellodocker:latest
+     latest: Pulling from kickscar/hellodocker
+     e7c96db7181b: Pull complete 
+     50958466d97a: Pull complete 
+     56174ae7ed1d: Pull complete 
+     284842a36c0d: Pull complete 
+     83cf8dfbb24f: Pull complete 
+     15c6e96168ae: Pull complete 
+     Digest: sha256:1d21c142f6ddf12db08e37be0cbd5b1d029e141f3d6efe4fc2a008548ecec302
+     Status: Downloaded newer image for hellodocker-registry:5000/kickscar/hellodocker:latest
+     / # exit
+     ```      
+  
+     Worker02 Host Container  
+      
+     ```bash
+     $ docker container exec -it hellodocker-worker02 sh
+     / # docker image pull hellodocker-registry:5000/kickscar/hellodocker:latest
+     latest: Pulling from kickscar/hellodocker
+     Digest: sha256:1d21c142f6ddf12db08e37be0cbd5b1d029e141f3d6efe4fc2a008548ecec302
+     Status: Downloaded newer image for hellodocker-registry:5000/kickscar/hellodocker:latest
+     / # exit
+     ```      
+      
+     Worker03 Host Container  
+      
+     ```bash
+     $ docker container exec -it hellodocker-worker03 sh
+     / # docker image pull hellodocker-registry:5000/kickscar/hellodocker:latest
+     latest: Pulling from kickscar/hellodocker
+     Digest: sha256:1d21c142f6ddf12db08e37be0cbd5b1d029e141f3d6efe4fc2a008548ecec302
+     Status: Downloaded newer image for hellodocker-registry:5000/kickscar/hellodocker:latest
+     / # docker image ls
+     REPOSITORY                                       TAG      IMAGE ID       CREATED        SIZE
+     hellodocker-registry:5000/kickscar/hellodocker   latest   ea9c0fcdd86b   4 days ago     76.4MB
+     / # exit
+     ```      
+#### 2. __Service__
+ 
+  1) 도커 서비스란?  
+     + 애플리케이션을 구성하는 일부 컨테이너를 제어하기 위한 단위
+     + 하나의 컨테이너일 수도 있고 여러 종류 컨테이너로 구성될 수도 있다.
+     
+  2) 서비스 생성 및 실행
+     ```bash
+     $ docker container exec -it hellodocker-manager sh
+     / # docker service create --replicas 1 --publish 8000:8080 --name hellodocker hellodocker-registry:5000/kickscar/hellodocker
+     1/1: running   [==================================================>] 
+     verify: Service converged 
+     / # docker service ls
+     ID            NAME          MODE          REPLICAS     IMAGE                                                   PORTS
+     gkqfr3aque64  hellodocker   replicated    1/1          hellodocker-registry:5000/kickscar/hellodocker:latest   *:8000->8080/tcp
+     
+     ```
+  3) Scale Out
+  
+     ```bash
+     $ docker container exec -it hellodocker-manager sh
+     / # docker service scale hellodocker=6
+     hellodocker scaled to 6
+     overall progress: 6 out of 6 tasks 
+     1/6: running   [==================================================>] 
+     2/6: running   [==================================================>] 
+     3/6: running   [==================================================>] 
+     4/6: running   [==================================================>] 
+     5/6: running   [==================================================>] 
+     6/6: running   [==================================================>] 
+     verify: Service converged 
+     ```
+
+  3) 노드 분산 배치 확인하기
+     ```bash
+     $ docker container exec -it hellodocker-manager sh
+     / # docker service ps hellodocker
+     ID                  NAME                IMAGE                                                   NODE                DESIRED STATE       CURRENT STATE                ERROR               PORTS
+     paox1l3u1y8r        hellodocker.1       hellodocker-registry:5000/kickscar/hellodocker:latest   a21626a9507d        Running             Running 7 minutes ago                            
+     jwqkc97mghmb        hellodocker.2       hellodocker-registry:5000/kickscar/hellodocker:latest   1c3bb264420f        Running             Running about a minute ago                       
+     h9mvf2ma38mo        hellodocker.3       hellodocker-registry:5000/kickscar/hellodocker:latest   717c3bd59b6e        Running             Running about a minute ago                       
+     vr3ubull2a8q        hellodocker.4       hellodocker-registry:5000/kickscar/hellodocker:latest   717c3bd59b6e        Running             Running about a minute ago                       
+     y3ek5dzqhk30        hellodocker.5       hellodocker-registry:5000/kickscar/hellodocker:latest   a21626a9507d        Running             Running about a minute ago                       
+     d7bggjwlxbae        hellodocker.6       hellodocker-registry:5000/kickscar/hellodocker:latest   4c08452c11fb        Running             Running about a minute ago                       
+     / # 
+     ```
+  4) 서비스 제거
+     ```bash
+     $ docker container exec -it hellodocker-manager sh
+     / # docker service rm hellodocker
+     / # 
+     ```
+            
