@@ -1,6 +1,6 @@
 version: "3"
 services:
   hellodocker:
-    build: .
+    build: ../../hellodocker-compose-build
     ports:
       - 3030:3000

@@ -8,8 +8,9 @@
   3) Using a YAML file to configure application's services
   4) Strting Project is Development of Docker Management Tool 'Fig'
 
-#### 1. __practice01: Docker Compose 명령으로 여러 컨테이너 실행__
-  1) Create Directory /docker-practices/docker-basics/hellodocker-compose
+#### 1. __practice01: Docker Compose 명령으로 하나 컨테이너 실행__
+  1) Create Directory & Change Directory ./practice01
+  
   2) Write docker-compose.yml
      ```yml
      version: "3"
@@ -44,10 +45,12 @@
      $ docker conatiner l -a
      ```
      
-#### 2. __practice02: 이미지 빌드와 함께 여러 컨테이너 실행__
-  1) Create Directory /docker-practices/docker-basics/hellodocker-compose-build
-  2) Dockerfile, server.js exists in Directory
-  2) Write docker-compose.yml
+#### 2. __practice02: 이미지 빌드와 함께 하나 컨테이너 실행__
+  1) Create Directory & Change Directory ./practice02
+
+  2) Copy Dockerfile, server.js
+
+  3) Write docker-compose.yml
      ```yml
      version: "3"
      services:
@@ -56,17 +59,17 @@
            ports:
               - 3030:3000     
      ```
-  3) Run Containers
+  4) Run Containers
      ```bash
      docker-compose up -d --build
      ``` 
      -d : daemon(background) 실행  
      --build : 강제 빌드(forced)
-  4) Verify
+  5) Verify
      ```bash
      docker container ls
      ```
-  5) Test
+  6) Test
      ```bash
      curl 'http://localhost:3030'
      ```
@@ -74,8 +77,9 @@
 
 ### 4-2. 2개 젠킨스(Master + Slave) 컨테이너 실행하기
 
-#### 1. __practice01: Jenkins Master Node Container 실행__
-  1) Create Directory /docker-practices/docker-basics/jenkins-master-node
+#### 1. __practice03: Jenkins Master Node Container 실행__
+  1) Create Directory & Change Directory ./practice03
+  
   2) Write docker-compose.yml
      ```yml
      version: "3"
@@ -193,11 +197,11 @@
      + Jenkins 관리 > 노드 관리
      + 신규노드 메뉴를 눌러 slave01 를 추가       
  
-      <img src="./assets/00003.png" width="500px" />
+      <img src="assets/00003.png" width="500px" />
       
      + 생성 후, slave01 노드 설정
       
-      <img src="./assets/00004.png" width="500px" />
+      <img src="assets/00004.png" width="500px" />
       
       Remote root directory : /home/jenkins  
       Launch method : Launch agent agents via SSH  
@@ -205,7 +209,7 @@
       Credentials : Jenkins 선택  
       Host Key Verification Strategy : Non Verifying Verification Strategy  
       
-      <img src="./assets/00005.png" width="500px" />
+      <img src="assets/00005.png" width="500px" />
       
       Username : Jenkins
       Private Key : /jenkins_home/.ssh/id_rsa 의 내용  
@@ -214,7 +218,7 @@
       
       slave에 연결이 성공하면 Error가 없다.
       
-      <img src="./assets/00006.png" width="500px" />
+      <img src="assets/00006.png" width="500px" />
        
   6) Problems
      + Master/Slave 컨테이너 작업에 운영자가 직접하는 Operation 이 다소 있다.

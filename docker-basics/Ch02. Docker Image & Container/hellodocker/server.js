@@ -8,7 +8,6 @@ var server =  http.createServer( function( request, response ) {
         "Content-Type": "text/html"
     });
     response.end(  "Hello Docker\n"  );
-
 } );
 
 server.listen( port, function() {

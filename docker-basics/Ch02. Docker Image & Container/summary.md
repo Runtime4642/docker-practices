@@ -1,10 +1,9 @@
-## 2. Deploy Docker Container
-
+## 2. Docker Image & Container
 
 ### 2-1. Execute Application as Container
 
-#### 1. __Create Simple Echo Server with Node.js__
-  1) Create Directory /docker-practices/docker-basics/hellodocker
+#### 1. __Create HelloDocker Web Server with Node.js__
+  1) Create Directory ./hellodocker
   2) Write server.js
      ```js
      var http = require('http');
@@ -17,7 +16,6 @@
              "Content-Type": "text/html"
          });
          response.end(  "Hello Docker\n"  );
-     
      } );
      
      server.listen( port, function() {
@@ -107,11 +105,13 @@
       
      --pull  
      베이스 이미지를 빌드시 매번 새롭게 받아온다. (--pull=true)
+     
 #### 3. __이미지 검색__
   1) 검색 예  
      ```bash
      $ docker search centos7 --limit 10
      ```
+     
 #### 4. __이미지 내려받기__
   1) 명령
      ```bash
@@ -121,6 +121,7 @@
      ```bash
      $ docker image pull kickscar/helloworld
      ``` 
+     
 #### 5. __이미지 목록__
   1) 기본 사용 예
      ```bash
@@ -129,11 +130,13 @@
   2) Options  
      -a  
      자세하게, 이름과 태그가 없는 이미지까지 출력
+     
 #### 6. __이미지 ID에 태그 부여하기__
   1) 기본 사용 예
      ```bash
      $ docker tag kickscar/hellodocker:latest kickscar/echo:latest
      ```
+     
 ##### 7. __이미지를 외부에 공개하기(Docker Hub 등록)__
   1) 기본 사용 예
      ```bash
@@ -278,3 +281,28 @@
      $ docker container exec ls
      $ docker container exec kickscar-echo rm -f dummy.txt
      $ docker container exec ls
+     
+     
+          
+## 3. Miscellaneous Operation
+
+##### 3-1. 실행 중이 아닌 모든 컨테이너 파기
+   1) 명령
+      ```bash
+      $ docker container prune
+      ```
+##### 3-2. tag가 붙지 않은 dagling image 삭제
+   1) 명령
+      ```bash
+      $ docker image prune
+      ```
+##### 3-3. 사용하지 않은 모든 리소스(이미지,컨테이너,볼륨,네트워크..) 일괄삭제
+   1) 명령
+      ```bash
+      $ docker system prune
+      ```
+##### 3-4. 컨테이너 상태 모니터링
+   1) 명령
+      ```bash
+      $ docker container stats [대상 컨테이너 아이디...]
+      ```

@@ -8,15 +8,15 @@
 
 
 ### 4-2. Compose vs Swarm vs Service vs Stack
-  1) Compose : 다수 컨터이너로 구성된 어플리케이션 관리(single host)
-  2) Swarm   : 컨테이너들의 클러스터 구축 및 스케줄링과 같은 관리용도로 쓰인다(multi hosts)
-  3) Service : Service in Swarm Cluster, a Set of One Container More (주로 개별적 서비스 관리에 사용할 수 있다)
-  4) Stack   : Manage Application Grouped Swarm's Services (그니깐, 주로 멀티 서비스 관리에 적용할 수 있다)
+  1) Compose : 다수 컨터이너로 구성된 어플리케이션 관리(보통 그냥 컴포즈는 다수 컨테이너가 단일 호스트에서 실행될 때...)
+  2) Swarm   : 스웜 클러스터 라 보통 부르듯 다수의 컨테이너를 묶어 클러스터를 구축하고 스케줄링과 같은 관리용도로 쓰인다(다수의 컨테이너가 다수의 호스트에서 통신하면서 관리가 된다)
+  3) Service : Service in Swarm Cluster, a Set of One Container More (주로 개별적 이미지의 서비스가 제어(분산, 스케일인아웃 등)되는 단위라 보면 된다)
+  4) Stack   : Manage Application Grouped Swarm's Services (서비스의 그룹핑 개념이 들어간다. 물리적으로 보면, 스웝 클러스터안의 컴포즈라 볼 수 있다. 그런데 각 컴포즈의 이미지들이 서비스가 되기 때문에 제어가 된다.)
 
 
 ### 4-3. __practice01: Swarm Cluster 구성해 보기__
 
-#### 1. __여러 대의 도커 호스트에 실해되는 컨테이너 구성__
+#### 1. __여러 대의 도커 호스트에 실행되는 컨테이너 구성__
   1) DIND(Docker in Docker) 를 사용해 여러 호스트내의 도커 컨테이너 구성
   2) 컨테이너 종류
      + registry(1) : 도커 레지스트리 역활 (도커인 도커에서 도케 호스트안의 도커는 도커 허브에서 이미지를 다운로드 할 수 없다. 일종의 inhouse registry)
@@ -214,13 +214,13 @@
      hellodocker-registry:5000/kickscar/hellodocker   latest   ea9c0fcdd86b   4 days ago     76.4MB
      / # exit
      ```      
-#### 2. __Service__
+#### 2. __Swarm Cluster에 Service 배포하기__
  
-  1) 도커 서비스란?  
-     + 애플리케이션을 구성하는 일부 컨테이너를 제어하기 위한 단위
-     + 하나의 컨테이너일 수도 있고 여러 종류 컨테이너로 구성될 수도 있다.
+  1) Docker Service란?  
+     + 애플리케이션을 구성하는 (일부 컨테이너를 제어)하기 위한 단위
+     + 복제(replica) 개념 확실히!
      
-  2) 서비스 생성 및 실행
+  2) 서비스 생성 및 배포(실행)
      ```bash
      $ docker container exec -it hellodocker-manager sh
      / # docker service create --replicas 1 --publish 8000:8080 --name hellodocker hellodocker-registry:5000/kickscar/hellodocker
@@ -266,4 +266,14 @@
      / # docker service rm hellodocker
      / # 
      ```
-            
+
+
+#### 3. __Swarm Cluster에 Stack 배포하기__
+  
+  1) Docker Stack이란?
+     + 하나 이상의 (*서비스를 그룹*)으로 묶는 단위
+     + (*서비스 상위개념*)으로 (서비스를 그룹)화 하여 애플리게이션을 구성하게 된다.
+     + (*서비스를 그룹화*)하기 때문에 스케일 인아웃, 실행제약조건을 가하는 것이 가능한 (*스웜에서 동작하는 컴포즈*)다.
+     + (*서비스 그룹*)은 (*Overlay Network*)에 포함되어야 통신이 가능하다. (당연한 거 아님??)
+     
+  2) 스택 생성 및 배포
