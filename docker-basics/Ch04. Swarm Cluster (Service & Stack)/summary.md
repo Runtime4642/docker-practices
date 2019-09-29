@@ -8,10 +8,10 @@
 
 
 ### 4-2. Compose vs Swarm vs Service vs Stack
-  1) Compose : 다수 컨터이너로 구성된 어플리케이션 관리(보통 그냥 컴포즈는 다수 컨테이너가 단일 호스트에서 실행될 때...)
-  2) Swarm   : 스웜 클러스터 라 보통 부르듯 다수의 컨테이너를 묶어 클러스터를 구축하고 스케줄링과 같은 관리용도로 쓰인다(다수의 컨테이너가 다수의 호스트에서 통신하면서 관리가 된다)
-  3) Service : Service in Swarm Cluster, a Set of One Container More (주로 개별적 이미지의 서비스가 제어(분산, 스케일인아웃 등)되는 단위라 보면 된다)
-  4) Stack   : Manage Application Grouped Swarm's Services (서비스의 그룹핑 개념이 들어간다. 물리적으로 보면, 스웝 클러스터안의 컴포즈라 볼 수 있다. 그런데 각 컴포즈의 이미지들이 서비스가 되기 때문에 제어가 된다.)
+  1) Compose : 다수 컨터이너를 관리를 위해 하나로 묶고 관리하는 단위 또는 관리툴(보통, 컴포즈는 다수 컨테이너가 단일 호스트에서 실행)
+  2) Swarm   : 스웜 (클러스터)라 부르듯 다수의 컨테이너를 묶어 클러스터를 구축하고 스케줄링과 같은 관리용도로 쓰인다(툭히, 다수의 컨테이너가 다수의 호스트에서 연동되는 개념이 컴포즈와는 구분)
+  3) Service : Service in Swarm Cluster, a Set of One Container More (주로 개별적 이미지가 서비스라는 개념으로 제어(분산, 스케일인아웃, 실행제약)된다.)
+  4) Stack   : Manage Application Grouped Swarm's Services (서비스의 상위 개념으로 서비스의 그룹핑 단위이다. 스웜 클러스터 안의 컴포즈라 볼 수 있다. 그리고 컴포즈의 개별 컨테이너는 서비스가 된다. 그래서 서비스의 상위 개념이다.)
 
 
 ### 4-3. __practice01: Swarm Cluster 구성해 보기__
@@ -96,7 +96,7 @@
       
   4) compose 실행
      ```bash
-     $ docker compose up -d
+     $ docker-compose up -d
      ```
   5) verify
      ```bash
@@ -275,5 +275,88 @@
      + (*서비스 상위개념*)으로 (서비스를 그룹)화 하여 애플리게이션을 구성하게 된다.
      + (*서비스를 그룹화*)하기 때문에 스케일 인아웃, 실행제약조건을 가하는 것이 가능한 (*스웜에서 동작하는 컴포즈*)다.
      + (*서비스 그룹*)은 (*Overlay Network*)에 포함되어야 통신이 가능하다. (당연한 거 아님??)
+  
+  2) Overlay Network 생성
+     ```bash
+     $ docker container exec -it hellodocker-manager sh
+     / # docker network create --driver=overlay --attachable hellodocker-network
+     6ponqn3rtzvf58iq3uqykc9rq
+     / # 
+     ```
      
-  2) 스택 생성 및 배포
+  3) Stack Confguration 
+     
+     stack 설정파일: .stack/hellodocker-stack.yml  
+  
+     ```bash
+     version: "3"
+     services:
+       nginx:
+         image: gihyodocker/nginx-proxy
+         deploy:
+           replicas: 3
+           placement:
+             constraints: [node.role != hellodocker-manager]
+         environment:
+           BACKEND_HOST: hellodocker-api:8080
+         depends_on:
+           - api
+         networks:
+           - hellodocker-network
+       api:
+         image: hellodocker-registry:5000/kickscar/hellodocker:latest
+         deploy:
+           replicas: 3
+           placement:
+             constraints: [node.role != hellodocker-manager]
+         networks:
+           - hellodocker-network
+     
+     networks:
+       hellodocker-network:
+         external: true    
+     
+     ```
+     
+  4) Deploy Stack
+     ```bash
+     $ docker container exec -it hellodocker-manager sh
+     / # docker stack deploy -c /stack/hellodocker-stack.yml hellodocker-api
+     Creating service hellodocker-api_nginx
+     Creating service hellodocker-api_api 
+     ```
+  
+  5) Verify Stack Deployed
+     ```bash
+     $ docker container exec -it hellodocker-manager sh
+     / # docker stack services hellodocker-api
+     ID                  NAME                    MODE         REPLICAS    IMAGE                                                  PORTS
+     mhapt5e48h69        hellodocker-api_nginx   replicated   0/3         gihyodocker/nginx-proxy:latest                          
+     q5waxbc9l6g3        hellodocker-api_api     replicated   3/3         hellodocker-registry:5000/kickscar/hellodocker:latest   
+     / # 
+  
+  6) Verify Container in Stack Deployed
+     ```bash
+     $ docker container exec -it hellodocker-manager sh
+     / # docker stack ps hellodocker-api
+     ID                  NAME                          IMAGE                                                   NODE                DESIRED STATE       CURRENT STATE                  ERROR                              PORTS
+     s03jrcvf7o6j        hellodocker-api_nginx.1       gihyodocker/nginx-proxy:latest                          ed745a85fcfc        Running             Preparing about a minute ago                                      
+     yy8t6csbcp6j         \_ hellodocker-api_nginx.1   gihyodocker/nginx-proxy:latest                          094b93e2ec96        Shutdown            Rejected 2 minutes ago         "No such image: gihyodocker/ng…"   
+     xb5ryg197ys3         \_ hellodocker-api_nginx.1   gihyodocker/nginx-proxy:latest                          706a0fb94816        Shutdown            Rejected 4 minutes ago         "No such image: gihyodocker/ng…"   
+     zbvxhxdjtsw0         \_ hellodocker-api_nginx.1   gihyodocker/nginx-proxy:latest                          706a0fb94816        Shutdown            Rejected 5 minutes ago         "No such image: gihyodocker/ng…"   
+     z3iiri6ulbti         \_ hellodocker-api_nginx.1   gihyodocker/nginx-proxy:latest                          ed745a85fcfc        Shutdown            Rejected 6 minutes ago         "No such image: gihyodocker/ng…"   
+     mez3lgzack55        hellodocker-api_api.1         hellodocker-registry:5000/kickscar/hellodocker:latest   094b93e2ec96        Running             Running 7 minutes ago                                             
+     1hbfei9p64he        hellodocker-api_nginx.2       gihyodocker/nginx-proxy:latest                          094b93e2ec96        Running             Preparing 4 minutes ago                                           
+     ye7erny4uh7x         \_ hellodocker-api_nginx.2   gihyodocker/nginx-proxy:latest                          094b93e2ec96        Shutdown            Rejected 4 minutes ago         "No such image: gihyodocker/ng…"   
+     yaexoggyl77p         \_ hellodocker-api_nginx.2   gihyodocker/nginx-proxy:latest                          094b93e2ec96        Shutdown            Rejected 5 minutes ago         "No such image: gihyodocker/ng…"   
+     z23mt6ti6fo0         \_ hellodocker-api_nginx.2   gihyodocker/nginx-proxy:latest                          81e28205e9ea        Shutdown            Rejected 6 minutes ago         "No such image: gihyodocker/ng…"   
+     b8pnbe98pblp        hellodocker-api_api.2         hellodocker-registry:5000/kickscar/hellodocker:latest   ed745a85fcfc        Running             Running 7 minutes ago                                             
+     uptdo6ewxzbv        hellodocker-api_nginx.2       gihyodocker/nginx-proxy:latest                          81e28205e9ea        Shutdown            Rejected 7 minutes ago         "No such image: gihyodocker/ng…"   
+     mvrz2cqu7ps6        hellodocker-api_nginx.3       gihyodocker/nginx-proxy:latest                          ed745a85fcfc        Running             Preparing about a minute ago                                      
+     pnh1su9z149q         \_ hellodocker-api_nginx.3   gihyodocker/nginx-proxy:latest                          706a0fb94816        Shutdown            Failed about a minute ago      "task: non-zero exit (1)"          
+     uchvuj3z77lg         \_ hellodocker-api_nginx.3   gihyodocker/nginx-proxy:latest                          81e28205e9ea        Shutdown            Rejected about a minute ago    "No such image: gihyodocker/ng…"   
+     ru6iumemjk4y         \_ hellodocker-api_nginx.3   gihyodocker/nginx-proxy:latest                          706a0fb94816        Shutdown            Failed 2 minutes ago           "task: non-zero exit (1)"          
+     ohb1p4wkftiy        hellodocker-api_api.3         hellodocker-registry:5000/kickscar/hellodocker:latest   81e28205e9ea        Running             Running 7 minutes ago                                             
+     mgrquxng4ano        hellodocker-api_nginx.3       gihyodocker/nginx-proxy:latest                          706a0fb94816        Shutdown            Failed 2 minutes ago           "task: non-zero exit (1)"          
+     / #
+     ```
