@@ -283,8 +283,19 @@
      6ponqn3rtzvf58iq3uqykc9rq
      / # 
      ```
+  3) Register nginix Image into Private Docker Registry
+태그 붙이기   
+     ```bash
+     $ docker image tag kickscar/nginx:latest localhost:5000/kickscar/nginx:latest
+     ```
      
-  3) Stack Confguration 
+     등록하기
+     ```bash
+     $ docker image push localhost:5000/kickscar/nginx:latest
+     ```
+     ```
+    
+  4) Stack Confguration 
      
      stack 설정파일: .stack/hellodocker-stack.yml  
   
@@ -292,7 +303,7 @@
      version: "3"
      services:
        nginx:
-         image: gihyodocker/nginx-proxy
+         image: localhost:5000/kickscar/nginx:latest
          deploy:
            replicas: 3
            placement:
@@ -318,7 +329,7 @@
      
      ```
      
-  4) Deploy Stack
+  5) Deploy Stack
      ```bash
      $ docker container exec -it hellodocker-manager sh
      / # docker stack deploy -c /stack/hellodocker-stack.yml hellodocker-api
@@ -326,37 +337,25 @@
      Creating service hellodocker-api_api 
      ```
   
-  5) Verify Stack Deployed
+  6) Verify Stack Deployed
      ```bash
      $ docker container exec -it hellodocker-manager sh
      / # docker stack services hellodocker-api
      ID                  NAME                    MODE         REPLICAS    IMAGE                                                  PORTS
-     mhapt5e48h69        hellodocker-api_nginx   replicated   0/3         gihyodocker/nginx-proxy:latest                          
+     mhapt5e48h69        hellodocker-api_nginx   replicated   3/3         hellodocker-registry:5000/kickscar/nginx:latest                          
      q5waxbc9l6g3        hellodocker-api_api     replicated   3/3         hellodocker-registry:5000/kickscar/hellodocker:latest   
      / # 
   
-  6) Verify Container in Stack Deployed
+  7) Verify Container in Stack Deployed
      ```bash
      $ docker container exec -it hellodocker-manager sh
      / # docker stack ps hellodocker-api
-     ID                  NAME                          IMAGE                                                   NODE                DESIRED STATE       CURRENT STATE                  ERROR                              PORTS
-     s03jrcvf7o6j        hellodocker-api_nginx.1       gihyodocker/nginx-proxy:latest                          ed745a85fcfc        Running             Preparing about a minute ago                                      
-     yy8t6csbcp6j         \_ hellodocker-api_nginx.1   gihyodocker/nginx-proxy:latest                          094b93e2ec96        Shutdown            Rejected 2 minutes ago         "No such image: gihyodocker/ng…"   
-     xb5ryg197ys3         \_ hellodocker-api_nginx.1   gihyodocker/nginx-proxy:latest                          706a0fb94816        Shutdown            Rejected 4 minutes ago         "No such image: gihyodocker/ng…"   
-     zbvxhxdjtsw0         \_ hellodocker-api_nginx.1   gihyodocker/nginx-proxy:latest                          706a0fb94816        Shutdown            Rejected 5 minutes ago         "No such image: gihyodocker/ng…"   
-     z3iiri6ulbti         \_ hellodocker-api_nginx.1   gihyodocker/nginx-proxy:latest                          ed745a85fcfc        Shutdown            Rejected 6 minutes ago         "No such image: gihyodocker/ng…"   
-     mez3lgzack55        hellodocker-api_api.1         hellodocker-registry:5000/kickscar/hellodocker:latest   094b93e2ec96        Running             Running 7 minutes ago                                             
-     1hbfei9p64he        hellodocker-api_nginx.2       gihyodocker/nginx-proxy:latest                          094b93e2ec96        Running             Preparing 4 minutes ago                                           
-     ye7erny4uh7x         \_ hellodocker-api_nginx.2   gihyodocker/nginx-proxy:latest                          094b93e2ec96        Shutdown            Rejected 4 minutes ago         "No such image: gihyodocker/ng…"   
-     yaexoggyl77p         \_ hellodocker-api_nginx.2   gihyodocker/nginx-proxy:latest                          094b93e2ec96        Shutdown            Rejected 5 minutes ago         "No such image: gihyodocker/ng…"   
-     z23mt6ti6fo0         \_ hellodocker-api_nginx.2   gihyodocker/nginx-proxy:latest                          81e28205e9ea        Shutdown            Rejected 6 minutes ago         "No such image: gihyodocker/ng…"   
-     b8pnbe98pblp        hellodocker-api_api.2         hellodocker-registry:5000/kickscar/hellodocker:latest   ed745a85fcfc        Running             Running 7 minutes ago                                             
-     uptdo6ewxzbv        hellodocker-api_nginx.2       gihyodocker/nginx-proxy:latest                          81e28205e9ea        Shutdown            Rejected 7 minutes ago         "No such image: gihyodocker/ng…"   
-     mvrz2cqu7ps6        hellodocker-api_nginx.3       gihyodocker/nginx-proxy:latest                          ed745a85fcfc        Running             Preparing about a minute ago                                      
-     pnh1su9z149q         \_ hellodocker-api_nginx.3   gihyodocker/nginx-proxy:latest                          706a0fb94816        Shutdown            Failed about a minute ago      "task: non-zero exit (1)"          
-     uchvuj3z77lg         \_ hellodocker-api_nginx.3   gihyodocker/nginx-proxy:latest                          81e28205e9ea        Shutdown            Rejected about a minute ago    "No such image: gihyodocker/ng…"   
-     ru6iumemjk4y         \_ hellodocker-api_nginx.3   gihyodocker/nginx-proxy:latest                          706a0fb94816        Shutdown            Failed 2 minutes ago           "task: non-zero exit (1)"          
-     ohb1p4wkftiy        hellodocker-api_api.3         hellodocker-registry:5000/kickscar/hellodocker:latest   81e28205e9ea        Running             Running 7 minutes ago                                             
-     mgrquxng4ano        hellodocker-api_nginx.3       gihyodocker/nginx-proxy:latest                          706a0fb94816        Shutdown            Failed 2 minutes ago           "task: non-zero exit (1)"          
+     ID                  NAME                      IMAGE                                                   NODE                DESIRED STATE       CURRENT STATE                  ERROR                              PORTS
+     4s4v587zc143        hellodocker-api_api.1     hellodocker-registry:5000/kickscar/hellodocker:latest   094b93e2ec96        Running             Running 24 minutes ago                       
+     8fe89ehcwldt        hellodocker-api_nginx.1   hellodocker-registry:5000/kickscar/nginx:latest         ed745a85fcfc        Running             Running 24 minutes ago                       
+     364asiqyry1o        hellodocker-api_api.2     hellodocker-registry:5000/kickscar/hellodocker:latest   81e28205e9ea        Running             Running 24 minutes ago                       
+     7kk1crnhl72s        hellodocker-api_nginx.2   hellodocker-registry:5000/kickscar/nginx:latest         094b93e2ec96        Running             Running 24 minutes ago                       
+     jt4au3zq7euy        hellodocker-api_api.3     hellodocker-registry:5000/kickscar/hellodocker:latest   706a0fb94816        Running             Running 24 minutes ago                       
+     v5hwb7l66rpt        hellodocker-api_nginx.3   hellodocker-registry:5000/kickscar/nginx:latest         706a0fb94816        Running             Running 24 minutes ago                       
      / #
      ```

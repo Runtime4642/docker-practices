@@ -1,7 +1,7 @@
 version: "3"
 services:
   nginx:
-    image: gihyodocker/nginx-proxy
+    image: hellodocker-registry:5000/kickscar/nginx:latest
     deploy:
       replicas: 3
       placement:
