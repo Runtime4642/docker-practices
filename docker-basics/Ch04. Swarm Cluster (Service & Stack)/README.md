@@ -309,7 +309,7 @@
            placement:
              constraints: [node.role != hellodocker-manager]
          environment:
-           BACKEND_HOST: hellodocker-api:8080
+           BACKEND_HOST: hellodocker-api:3000
          depends_on:
            - api
          networks:
@@ -373,7 +373,7 @@
       
      services:
        app:
-         image: localhost:5000/kickscar/visualizer:latest
+         image: hellodocker-registry:5000/kickscar/visualizer:latest
          ports:
            - "9000:8080"
          volumes:
@@ -429,5 +429,129 @@
   6) 브라우저로 확인 (http://localhost:9000)
   
      <img src="assets/00001.png" width="6000px" />
+
+ 
   
+#### 5. __HAProxy, Ingress and Load Balancer for Docker Swarm Cluster__ 
   
+  1) HAProxy
+     + 외부에 여러 노드에 분산되어 실행중인 컨터이너의 서비스를 외부에 노출(Ingress)
+     + 서비스(컨테이너)가 배치된 노드의 부하 분산(Load Balancer)
+  
+  2) .stack/ingress.yml 작성
+  
+     ```yaml
+     version: "3"
+    
+     services:
+       haproxy:
+         image: hellodocker-registry:5000/kickscar/haproxy
+         networks:
+           - hellodocker-network
+         volumes:
+           - /var/run/docker.sock:/var/run/docker.sock
+         deploy:
+           mode: global
+           placement:
+             constraints:
+               - node.role == manager
+         ports:
+           - 80:80
+           - 1936:1936
+    
+     networks:
+       hellodocker-network:
+         external: true
+     ```
+
+  3) .stack/hellodocker-stack.yml 수정 및 재배포
+  
+     ```yaml
+     version: "3"
+     services:
+       nginx:
+         image: hellodocker-registry:5000/kickscar/nginx:latest
+         deploy:
+           replicas: 3
+           placement:
+             constraints: [node.role != hellodocker-manager]
+         environment:
+           SERVICE_PORT: 80
+           BACKEND_HOST: hellodocker-api:3000
+         depends_on:
+           - api
+         networks:
+           - hellodocker-network
+       api:
+         image: hellodocker-registry:5000/kickscar/hellodocker:latest
+         deploy:
+           replicas: 3
+           placement:
+             constraints: [node.role != hellodocker-manager]
+         networks:
+           - hellodocker-network
+     
+     networks:
+       hellodocker-network:
+         external: true    
+     
+     ```
+     + HAProxy가 서비스를 찾기 위해 nginx 환경변수에 SERVICE_PORT 추가
+     + 설정이 변경 되었기 때문에 재배포
+       
+       ```bash
+       $ docker container exec -it hellodocker-manager sh
+       / # docker stack deploy -c /stack/hellodocker-stack.yml hellodocker-api
+       Updating service hellodocker-api_nginx (id: hjzhqfqd0aypsbbcn5xfef9aq)
+       Updating service hellodocker-api_api (id: qyxw1h7go1kvqst864rs60vwi)
+       / # 
+       ```
+       + 서비스가 존재하고 설정만 변경되었기 때문에 "Updating service 서비스명" 만 출력
+  
+  4) HAProxy 이미지 Private Docker Registry 에 등록하기
+  
+       이미지 풀링
+       ```bash
+       $ docker image pull dockercloud/haproxy
+       Using default tag: latest
+       latest: Pulling from dockercloud/haproxy
+       ```
+         
+       태그 붙이기   
+       ```bash
+       $ docker image tag dockercloud/haproxy:latest localhost:5000/kickscar/haproxy:latest
+       ```
+       
+       등록하기
+       ```bash
+       $ docker image push localhost:5000/kickscar/haproxy:latest
+       ```
+  5) Ingress 배포
+     ```bash
+     $ docker container exec -it hellodocker-manager sh
+     / # docker stack deploy -c /stack/ingress.yml hellodocker-ingress
+     Creating service hellodocker-ingress_haproxy
+     / # 
+     ```
+  6) Ingress 배포 확인
+     ```bash
+     $ docker container exec -it hellodocker-manager sh
+     / # docker service ls
+     ID                  NAME                          IMAGE                                                   PORTS
+     l47bjbvpnyhb        hellodocker                   hellodocker-registry:5000/kickscar/hellodocker:latest   *:8000->8080/tcp
+     qyxw1h7go1kv        hellodocker-api_api           hellodocker-registry:5000/kickscar/hellodocker:latest   
+     hjzhqfqd0ayp        hellodocker-api_nginx         hellodocker-registry:5000/kickscar/nginx:latest         
+     nhkffpg7p66z        hellodocker-ingress_haproxy   hellodocker-registry:5000/kickscar/haproxy:latest       *:80->80/tcp, *:1936->1936/tcp
+     o5f13y5aopkw        hellodocker-visualizer_app    hellodocker-registry:5000/kickscar/visualizer:latest    *:9000->8080/tcp
+     / # 
+     ```
+     + 각 컨테이너 이미지의 Ports 확인 해 보고 반드시 이해 할 것!
+  
+  7) Ingress 서비스 접근
+     ```bash
+     $ curl http://localhost:8000
+     Hello Docker
+     $
+     ```
+       
+#### 6. __스웜 클러스터 구성 및 관리(정리해보기)__          

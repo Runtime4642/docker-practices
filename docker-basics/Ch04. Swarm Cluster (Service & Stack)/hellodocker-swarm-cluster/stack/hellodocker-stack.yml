@@ -1,5 +1,6 @@
+version: "3"
 
-
+services:
   nginx:
     image: hellodocker-registry:5000/kickscar/nginx:latest
     deploy:
@@ -7,7 +8,7 @@
       placement:
         constraints: [node.role != hellodocker-manager]
     environment:
-      BACKEND_HOST: hellodocker-api:8080
+      BACKEND_HOST: hellodocker-api:3000
     depends_on:
       - api
     networks:
