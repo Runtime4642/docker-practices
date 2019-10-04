@@ -81,7 +81,7 @@
   1) Create Directory & Change Directory ./practice03
   
   2) Write docker-compose.yml
-     ```yml
+     ```yaml
      version: "3"
      services:
         jenkins-master:
@@ -157,7 +157,7 @@
      ```
      
   2) Create Slave Jenkins Container
-     ```ssh
+     ```yaml
      version: "3"
      services:
        master:

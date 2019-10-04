@@ -23,7 +23,7 @@
      + manager(1) : Swarm Cluster 전체를 제어하는 역할
      + worker(3) : 실제 서비스 이미지를 실행하는 컨테이너를 구동하는 도커 호스트다.
   3) docker-compose.yml 작성
-     ```bash
+     ```yaml
      version: "3"
      services:
        hellodocker-registry:
@@ -283,8 +283,9 @@
      6ponqn3rtzvf58iq3uqykc9rq
      / # 
      ```
-  3) Register nginix Image into Private Docker Registry
-태그 붙이기   
+
+  3) Register nginix Image into Private Docker Registry  
+     태그 붙이기   
      ```bash
      $ docker image tag kickscar/nginx:latest localhost:5000/kickscar/nginx:latest
      ```
@@ -293,17 +294,16 @@
      ```bash
      $ docker image push localhost:5000/kickscar/nginx:latest
      ```
-     ```
     
   4) Stack Confguration 
      
      stack 설정파일: .stack/hellodocker-stack.yml  
   
-     ```bash
+     ```yaml
      version: "3"
      services:
        nginx:
-         image: localhost:5000/kickscar/nginx:latest
+         image: hellodocker-registry:5000/kickscar/nginx:latest
          deploy:
            replicas: 3
            placement:
@@ -359,3 +359,75 @@
      v5hwb7l66rpt        hellodocker-api_nginx.3   hellodocker-registry:5000/kickscar/nginx:latest         706a0fb94816        Running             Running 24 minutes ago                       
      / #
      ```
+     
+     
+#### 4. __Visualize Deployment of Containers in Swarm Cluster__
+  
+  1) Visualizer Application  
+     시각화 툴로, 스웜 클러스터내의 각 노드별 컨테이너 배치현황을 시각화한다.  
+
+  2) .stack/visualizer.yml 작성
+  
+     ```yaml
+     version: "3"
+      
+     services:
+       app:
+         image: localhost:5000/kickscar/visualizer:latest
+         ports:
+           - "9000:8080"
+         volumes:
+           - /var/run/docker/sock:/var/run/docker.sock
+         deploy:
+           mode: global
+           placement:
+             constraints: [node.role == manager]     
+     ```
+     + mode: global -> visuallizer clinet 컨테이너를 스웜 클러이상의 모든 노드에 배치 시킨다.
+     + node.role == manager -> manager 노드에 웹 서비스가 가능한 컨테이너를 배치 시킨다.
+     + 접근포트(포트포워딩)
+       ```  
+       ( host   ->   manager in host )  :  ( manager in host   ->   visualizer )   
+       ( 9000   ->         9000      )  :  (       9000        ->       8080   ) 
+       ```
+          
+  3) visualizer 이미지 Private Docker Registry 에 등록하기  
+     이미지 풀링
+     ```bash
+     $ docker image pull dockersamples/visualizer
+     Using default tag: latest
+     latest: Pulling from dockersamples/visualizer
+     ```
+       
+     태그 붙이기   
+     ```bash
+     $ docker image tag dockersamples/visualizer:latest localhost:5000/kickscar/visualizer:latest
+     ```
+     
+     등록하기
+     ```bash
+     $ docker image push localhost:5000/kickscar/visualizer:latest
+     ```
+  
+  4) 스택에 배포하기
+     ```bash
+     $ docker container exec -it hellodocker-manager sh
+     / # docker stack deploy -c /stack/visualizer.yml hellodocker-visualizer
+     Creating network hellodocker-visualizer_default
+     Creating service hellodocker-visualizer_app
+     / # 
+     ```
+ 
+  5) 배포 확인
+     ```bash
+     $ docker container exec -it hellodocker-manager sh
+     / # docker stack ps visualizer
+     ID            NAME                                                   IMAGE                                                  NODE                DESIRED STATE       CURRENT STATE             ERROR               PORTS
+     xgis5osek1sh  hellodocker-visualizer_app.r5wwz0d1mzlzsvb2d1l0hx2gg   hellodocker-registry:5000/kickscar/visualizer:latest   81e28205e9ea        Running             Starting 13 seconds ago      
+     / # 
+     ```
+  6) 브라우저로 확인 (http://localhost:9000)
+  
+     <img src="assets/00001.png" width="6000px" />
+  
+  

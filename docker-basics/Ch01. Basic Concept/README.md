@@ -40,7 +40,7 @@
     echo 'Hello, World'        
     ```
 3. __Generate Dockerfile__
-    ```bash
+    ```dockerfile
     FROM ubuntu:16.04 
 
     COPY helloworld.sh /usr/local/bin
