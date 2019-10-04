@@ -197,11 +197,11 @@
      + Jenkins 관리 > 노드 관리
      + 신규노드 메뉴를 눌러 slave01 를 추가       
  
-      <img src="assets/00003.png" width="500px" />
+      <img src="assets/00003.png" width="600px" />
       
      + 생성 후, slave01 노드 설정
       
-      <img src="assets/00004.png" width="500px" />
+      <img src="assets/00004.png" width="600px" />
       
       Remote root directory : /home/jenkins  
       Launch method : Launch agent agents via SSH  
@@ -209,7 +209,7 @@
       Credentials : Jenkins 선택  
       Host Key Verification Strategy : Non Verifying Verification Strategy  
       
-      <img src="assets/00005.png" width="500px" />
+      <img src="assets/00005.png" width="600px" />
       
       Username : Jenkins
       Private Key : /jenkins_home/.ssh/id_rsa 의 내용  
@@ -218,7 +218,7 @@
       
       slave에 연결이 성공하면 Error가 없다.
       
-      <img src="assets/00006.png" width="500px" />
+      <img src="assets/00006.png" width="600px" />
        
   6) Problems
      + Master/Slave 컨테이너 작업에 운영자가 직접하는 Operation 이 다소 있다.
