@@ -421,7 +421,7 @@
   5) 배포 확인
      ```bash
      $ docker container exec -it hellodocker-manager sh
-     / # docker stack ps visualizer
+     / # docker stack ps hellodocker-visualizer
      ID            NAME                                                   IMAGE                                                  NODE                DESIRED STATE       CURRENT STATE             ERROR               PORTS
      xgis5osek1sh  hellodocker-visualizer_app.r5wwz0d1mzlzsvb2d1l0hx2gg   hellodocker-registry:5000/kickscar/visualizer:latest   81e28205e9ea        Running             Starting 13 seconds ago      
      / # 
