@@ -116,10 +116,12 @@
      ```
   5) Test  
      + 브라우저로 접근: http://localhost:8080   
-     <img src="./assets/00001.png" width="500px" />
+     <img src="http://assets.kickscar.me:8080/markdown/docker-practice/docker-basics/30001.png" width="600px" />
+     <br/><br/>  
      
      + 젠킨스 홈 화면  
-     <img src="./assets/00002.png" width="500px" />
+     <img src="http://assets.kickscar.me:8080/markdown/docker-practice/docker-basics/30002.png" width="600px" />
+     <br/><br/>  
        
      Volume 디렉토리 ./jenkins_home 젠킨스 홈 확인할 것.
      
@@ -197,11 +199,13 @@
      + Jenkins 관리 > 노드 관리
      + 신규노드 메뉴를 눌러 slave01 를 추가       
  
-      <img src="assets/00003.png" width="600px" />
+     <img src="http://assets.kickscar.me:8080/markdown/docker-practice/docker-basics/30003.png" width="600px" />
+     <br/><br/>  
       
      + 생성 후, slave01 노드 설정
       
-      <img src="assets/00004.png" width="600px" />
+     <img src="http://assets.kickscar.me:8080/markdown/docker-practice/docker-basics/30004.png" width="600px" />
+     <br/><br/>  
       
       Remote root directory : /home/jenkins  
       Launch method : Launch agent agents via SSH  
@@ -209,7 +213,8 @@
       Credentials : Jenkins 선택  
       Host Key Verification Strategy : Non Verifying Verification Strategy  
       
-      <img src="assets/00005.png" width="600px" />
+     <img src="http://assets.kickscar.me:8080/markdown/docker-practice/docker-basics/30005.png" width="600px" />
+     <br/><br/>  
       
       Username : Jenkins
       Private Key : /jenkins_home/.ssh/id_rsa 의 내용  
@@ -218,7 +223,8 @@
       
       slave에 연결이 성공하면 Error가 없다.
       
-      <img src="assets/00006.png" width="600px" />
+     <img src="http://assets.kickscar.me:8080/markdown/docker-practice/docker-basics/30006.png" width="600px" />
+     <br/><br/>  
        
   6) Problems
      + Master/Slave 컨테이너 작업에 운영자가 직접하는 Operation 이 다소 있다.

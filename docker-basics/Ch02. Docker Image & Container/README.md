@@ -57,18 +57,25 @@
   2) Options  
      -t :   
      이미지 이름 (tag명 생략시 자동으로 latest가 붙음, 생략시 해시값으로 이미지를 구분해야하기 때문에 말이 안된다)  
-     이미지명 충돌을 피하기 위해 / 로 시작하는 namespace를 사용하는 것이 좋다.
+     이미지명 충돌을 피하기 위해 /와 함께 namespace를 사용하는 것이 좋다.
 
   3) Verify  
      ```bash
      $ docker image ls
+     REPOSITORY             TAG                 IMAGE ID            CREATED             SIZE
+     kickscar/hellodocker   latest              7986c14df773        11 seconds ago      76.4MB
+     kickscar/helloworld2   latest              00e37b7becc4        4 minutes ago       121MB
+     kickscar/helloworld    latest              6ae68df34147        9 days ago          121MB
+     ubuntu                 16.04               657d80a6401d        2 weeks ago         121MB
+     node                   10-alpine           b95baba1cfdb        7 weeks ago         76.4MB     
      ```
 
 #### 4. __Run Docker Container__
   1) Run    
      ```bash
-     $ docker container run -t -p 3000:3000 kickscar/hellodocker
+     $ docker container run -d -p 3000:3000 kickscar/hellodocker
      ```
+
   2) Options  
      -d: daemon, background 실행 (기본적으로 foreground 실행)  
      -p: port forwarding
@@ -76,14 +83,20 @@
   3) Verify Running
      ```bash
      $ docker container ps
+     CONTAINER ID  IMAGE                 COMMAND                 CREATED        STATUS        PORTS                  NAMES
+     16074f6b3e15  kickscar/hellodocker  "docker-entrypoint.s…"  9 minutes ago  Up 9 minutes  0.0.0.0:3000->3000/tcp stupefied_mcclintock     
      ```
-  4) Stop Running Container 
-     ```bash
-     $ docker container stop [container id]
-     ```
-  5) Verify Status
+
+  4) Verify Status
      ```bash
      $ curl http://localhost:3000/
+     Hello Docker
+     $
+     ```
+
+  5) Stop Running Container 
+     ```bash
+     $ docker container stop [container id]
      ```
 
 
@@ -162,7 +175,7 @@
   2) Options  
      
      -i  
-     컨테이너 표준 입략과의 연결을 그대로 유지, 컨테이너 쪽 셀에 들어가 명령을 실행할 수 있다  
+     컨테이너 표준 입력과의 연결을 그대로 유지, **컨테이너 셀에 들어가 명령을 실행**할 수 있다  
 
      -t  
      터미널 활성화
@@ -190,6 +203,8 @@
      ```bash
      $ docker image pull alpine:3.7
      $ docker container run -it alpine:3.7
+     / * exit
+     $
      ```
   2) 사용 예2 :  
      명령과 명령인자로 library/alpone:3.7 CMD 인스트럭션 /bin/sh 오버라이딩 하기  

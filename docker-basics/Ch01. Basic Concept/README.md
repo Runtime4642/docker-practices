@@ -13,8 +13,6 @@
     $ docker image ls
     REPOSITORY               TAG                 IMAGE ID            CREATED             SIZE
     kickscar/helloworld      latest              6ae68df34147        6 minutes ago       121MB  
-    ubuntu                   16.04               657d80a6401d        10 days ago         121MB
-    jenkins/jenkins          latest              cba3beb4ac0b        12 days ago         568MB
    
     $ docker conatiner run kickscar/helloworld:latest
     Hello, World
@@ -30,7 +28,7 @@
     ```
 
 #### 1-3. Build 'helloworld' Docker Image
-1. __Create Directory docker imagehelloworld__
+1. __Create Directory docker image helloworld__
 
 2. __Change Directory helloworld__
 
@@ -51,15 +49,19 @@
 
 4. __Build Image__  
     ```bash
-    $ docker image build -t <your namespace>/helloworld:latest .
+    $ docker image build -t <your namespace>/helloworld2:latest .
     ```
 
 5. __Verify Image__
     ```bash
     $ docker image ls
+    REPOSITORY             TAG                 IMAGE ID            CREATED             SIZE
+    kickscar/helloworld2   latest              00e37b7becc4        40 seconds ago      121MB
+    kickscar/helloworld    latest              6ae68df34147        9 days ago          121MB
+    ubuntu                 16.04               657d80a6401d        2 weeks ago         121MB
     ```
 
 6. __Run__
     ```bash
-    $ docker container run <your namespace>/helloworld
+    $ docker container run <your namespace>/helloworld2
     ```
