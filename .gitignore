@@ -4,5 +4,4 @@
 */settings.gradle
 */out
 */*.iml
-
 /docker-basics/jenkins-master-node/jenkins_home/
