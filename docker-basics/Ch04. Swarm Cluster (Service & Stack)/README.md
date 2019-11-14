@@ -428,8 +428,8 @@
      ```
   6) 브라우저로 확인 (http://localhost:9000)
   
-     <img src="assets/00001.png" width="6000px" />
-
+     <img src="http://assets.kickscar.me:8080/markdown/docker-practices/docker-basics/30006.png" width="600px" />
+     <br/><br/>  
  
   
 #### 5. __HAProxy, Ingress and Load Balancer for Docker Swarm Cluster__ 

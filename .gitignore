@@ -1,1 +1,6 @@
+.idea/
+*/.gradle/
+*/build/
+*/settings.gradle
+*/out
 /docker-basics/jenkins-master-node/jenkins_home/
