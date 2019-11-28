@@ -42,7 +42,7 @@
     1) 쉽게 이미지의 실행을 컨테이너라 생각하면 된다.
     2) 따라서 Container에 대한 오퍼레이션이 필요하다.
     
-        <img src="http://assets.kickscar.me:8080/markdown/docker-practices/docker-basics/10002.png" width="600px" />
+        <img src="http://assets.kickscar.me:8080/markdown/docker-practices/docker-basics/10002.png" width="800px" />
         <br>
         - 실행을 위해 run 명령을 사용했다. -a 옵션은 실행이 끝난 컨테이너까지 볼 수 있다.
         - rm은 컨테이너를 제거할 수 있다(컨테이너의 애플리케이션의 실행이 끝났다고 컨테이가 종료되는 것은 아니다. 재실행할 수도 있다.)
@@ -72,12 +72,12 @@
 
     4) Image 빌드 및 확인
     
-        <img src="http://assets.kickscar.me:8080/markdown/docker-practices/docker-basics/10004.png" width="600px" />
+        <img src="http://assets.kickscar.me:8080/markdown/docker-practices/docker-basics/10004.png" width="800px" />
         <br>
         - &lt;namespace&gt;/&lt;image name&gt;:&lt;tag&gt; 형식으로 빌드되는 이미지의 네이밍을 한다.
         - 빌드하기 위해 베이스가되는 이미지를 다운로드하는 모습을 확인할 수 있다.    
 
     5) 실행
 
-        <img src="http://assets.kickscar.me:8080/markdown/docker-practices/docker-basics/10005.png" width="600px" />
+        <img src="http://assets.kickscar.me:8080/markdown/docker-practices/docker-basics/10005.png" width="800px" />
         <br>
