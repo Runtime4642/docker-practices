@@ -79,5 +79,5 @@
 
     5) 실행
 
-        <img src="http://assets.kickscar.me:8080/markdown/docker-practices/docker-basics/11005.png" width="600px" />
+        <img src="http://assets.kickscar.me:8080/markdown/docker-practices/docker-basics/10005.png" width="600px" />
         <br>
