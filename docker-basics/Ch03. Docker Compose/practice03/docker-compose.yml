@@ -1,9 +1,0 @@
-version: "3"
-services:
-  master:
-    container_name: jenkins-master
-    image: jenkins/jenkins
-    ports:
-      - 8080:8080
-    volumes:
-      - ./jenkins_home:/var/jenkins_home
