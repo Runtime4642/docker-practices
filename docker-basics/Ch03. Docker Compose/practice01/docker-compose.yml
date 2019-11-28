@@ -1,0 +1,6 @@
+version: "3"
+services:
+  hellodocker:
+    image: kickscar/hellodocker
+    ports:
+      - 3030:3000

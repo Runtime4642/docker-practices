@@ -1,0 +1,27 @@
+version: "3"
+
+services:
+  nginx:
+    image: hellodocker-registry:5000/kickscar/nginx:latest
+    deploy:
+      replicas: 3
+      placement:
+        constraints: [node.role != hellodocker-manager]
+    environment:
+      BACKEND_HOST: hellodocker-api:3000
+    depends_on:
+      - api
+    networks:
+      - hellodocker-network
+  api:
+    image: hellodocker-registry:5000/kickscar/hellodocker:latest
+    deploy:
+      replicas: 3
+      placement:
+        constraints: [node.role != hellodocker-manager]
+    networks:
+      - hellodocker-network
+
+networks:
+  hellodocker-network:
+    external: true
