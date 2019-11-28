@@ -74,7 +74,8 @@
     
         <img src="http://assets.kickscar.me:8080/markdown/docker-practices/docker-basics/10004.png" width="800px" />
         <br>
-        - &lt;namespace&gt;/&lt;image name&gt;:&lt;tag&gt; 형식으로 빌드되는 이미지의 네이밍을 한다.
+        
+        - &lt;namespace&gt;/&lt;image name&gt;:&lt;tag&gt; 형식으로 빌드되는 이미지의 네이밍을 한다.  
         - 빌드하기 위해 베이스가되는 이미지를 다운로드하는 모습을 확인할 수 있다.    
 
     5) 실행
