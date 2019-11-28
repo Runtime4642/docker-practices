@@ -5,5 +5,3 @@
 */out
 */*.iml
 /docker-basics/jenkins-master-node/jenkins_home/
-.DS_Store
-*/.DS_Store
