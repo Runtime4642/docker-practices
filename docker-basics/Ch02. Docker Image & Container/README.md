@@ -12,7 +12,7 @@
 2. __초간단 Web Server hellodocker(node.js) 작성__
     1) 실습 디렉토리 hellodocker 만들기
         
-        <img src="http://assets.kickscar.me:8080/markdown/docker-practices/docker-basics/20002.png" width="800px" />
+        <img src="http://assets.kickscar.me:8080/markdown/docker-practices/docker-basics/20001.png" width="800px" />
         <br>
     
     2) server.js 작성
