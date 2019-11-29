@@ -35,17 +35,20 @@
         
         <img src="http://assets.kickscar.me:8080/markdown/docker-practices/docker-basics/10001.png" width="800px" />
         <br>
-        - :latest는 이미지에 붙히는 태그이다.
-        - image 다운로드 하는 명령은 pull이고 다운로드된 image를 리스트업하는 명령은 ls이다
+        
+        - latest는 이미지에 붙히는 태그이다.
+        - image를 다운로드 하는 명령은 pull이고 다운로드된 image를 리스트업하는 명령은 ls이다
             
-2. __Docker Container 살행__
-    1) 쉽게 이미지의 실행을 컨테이너라 생각하면 된다.
-    2) 따라서 Container에 대한 오퍼레이션이 필요하다.
+2. __Docker Container 실행__
+    1) 쉽게 실행된 상태의 이미지를 컨테이너라 보면 된다.
+    2) Container에 대한 기본 오퍼레이션은 다음과 같다.
     
         <img src="http://assets.kickscar.me:8080/markdown/docker-practices/docker-basics/10002.png" width="800px" />
         <br>
-        - 실행을 위해 run 명령을 사용했다. -a 옵션은 실행이 끝난 컨테이너까지 볼 수 있다.
-        - rm은 컨테이너를 제거할 수 있다(컨테이너의 애플리케이션의 실행이 끝났다고 컨테이가 종료되는 것은 아니다. 재실행할 수도 있다.)
+
+        - 실행을 위해 run 명령을 사용했다.
+        - 컨테이너의 목록은 ls 명령으로 확인할 수 있는데, a 옵션은 실행이 끝난 컨테이너까지 볼 수 있다.
+        - rm명령으로 컨테이너를 제거할 수 있다.(컨테이너 애플리케이션의 실행이 끝나도 재실행할 수 있는 등, 컨테이너가 종료되는 것은 아니다.)
 
 #### 1-3. Docker Image 빌드 및 실행
 1. __Docker Image 빌드__
@@ -55,12 +58,14 @@
         <br>
     
     2) 쉘스크립트 helloworld.sh 작성
+    
         ```bash
             #!/bin/sh
             echo 'Hello, World'        
         ```
        
     3) Dockerfile 작성
+    
         ```dockerfile
             FROM ubuntu:16.04 
         

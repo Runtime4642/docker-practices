@@ -1,6 +1,6 @@
 ## 2. Docker Image & Container
 
-### 2-1. Execute Application as Container
+### 2-1. 컨테이너로 애플리케이션 실행하기
 
 #### 1. __Create HelloDocker Web Server with Node.js__
   1) Create Directory ./hellodocker
