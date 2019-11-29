@@ -60,7 +60,7 @@
         - RUN  : docker image를 빌드핧 때 container 안에서 실행할 명령을 정의  
         - COPY : host machine의 file이나 directory를 container 안으로 복사 (cf. ADD Intruction 참고)  
         - CMD  : docker container를 실행할 때 container 안의 실행 할 process를 지정 (cf. CMD 명령 오버라이드 참고)  
-        - 다른 주요 Instructions
+        - 다른 주요 Instructions  
             LABEL :  
             ENV   :  
             ARG   :  
@@ -95,10 +95,10 @@
 
 #### 2-2. Docker Image 기본작업(Basic Operation)
 1. __이미지 관련 서브명령어 확인__
-    1) help
-        ```bash
-            $ docker image --help
-        ```
+    
+   ```bash
+        $ docker image --help
+    ```
 
 2. __이미지 빌드__
 
@@ -211,22 +211,19 @@
     2) --filter: 목록필터  
             
         예) 컨테이너 이름으로     
-            
-            ```bash
-                $ docker container ls --filter='name=kickscar-echo'
-            ```
+        ```bash
+            $ docker container ls --filter='name=kickscar-echo'
+        ```
     
         예) 이미지 이름으로   
-          
-            ```bash
-                $ docker container ls --filter='ancestor=kickscar/hellodocker' 
-            ```
+        ```bash
+            $ docker container ls --filter='ancestor=kickscar/hellodocker' 
+        ```
 
         예) 정지된 컨테이너만    
-            
-            ```bash
-                $ docker container ls --filter='status=exited'
-            ```
+        ```bash
+            $ docker container ls --filter='status=exited'
+        ```
           
     3) -a : 종료된 컨테이너를 포함한 컨테이너 목록 전부(all) 볼 수 있다.
 
