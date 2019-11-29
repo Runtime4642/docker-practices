@@ -26,7 +26,7 @@
     1) Docker Image가 실행된 상태
 
 
-#### 1-2. Image & Container 초간단 실습
+#### 1-2. Image & Container 간단 실습
 1. __Docker Image 다운로드__
     1) 도커허브를 통해 공개된 이미지를 다운로드하여 컨테이너로 실행할 수 있다.
     2) 깃허브처럼 도커허브에 자신의 레포지토리를 만들어 이미지를 업로드하고 공개할 수 있다.
@@ -41,7 +41,7 @@
         - 다운로드된 image의 목록을 보기위해 ls 명령을 사용했다.
             
 2. __Docker Container 실행__
-    1) 쉽게 실행된 상태의 이미지를 컨테이너라 보면 된다.
+    1) 쉽게 생각하면, 실행된 상태의 이미지를 컨테이너라 보면 된다.
     2) Container에 대한 기본 오퍼레이션은 다음과 같다.
     
         <img src="http://assets.kickscar.me:8080/markdown/docker-practices/docker-basics/10002.png" width="800px" />
