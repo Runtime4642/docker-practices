@@ -26,18 +26,19 @@
     1) Docker Image가 실행된 상태
 
 
-#### 1-2. Image & Container 간단 실습
+#### 1-2. Image & Container 초간단 실습
 1. __Docker Image 다운로드__
     1) 도커허브를 통해 공개된 이미지를 다운로드하여 컨테이너로 실행할 수 있다.
     2) 깃허브처럼 도커허브에 자신의 레포지토리를 만들어 이미지를 업로드하고 공개할 수 있다.
-    3) kickscar/helloworld는 실습용으로 도커허브에 올린 레포지토리/이미지 이름이다.
+    3) kickscar/helloworld는 실습용으로 도커허브에 올린 레포지토리/이미지 이다.
     4) docker CLI를 통해 image와 container에 대한 오퍼레이션을 할 수 있다.
         
         <img src="http://assets.kickscar.me:8080/markdown/docker-practices/docker-basics/10001.png" width="800px" />
         <br>
         
         - latest는 이미지에 붙히는 태그이다.
-        - image를 다운로드 하는 명령은 pull이고 다운로드된 image를 리스트업하는 명령은 ls이다
+        - image를 다운로드 하기위해 pull 명령을 사용했다.
+        - 다운로드된 image의 목록을 보기위해 ls 명령을 사용했다.
             
 2. __Docker Container 실행__
     1) 쉽게 실행된 상태의 이미지를 컨테이너라 보면 된다.
@@ -50,7 +51,7 @@
         - 컨테이너의 목록은 ls 명령으로 확인할 수 있는데, a 옵션은 실행이 끝난 컨테이너까지 볼 수 있다.
         - rm명령으로 컨테이너를 제거할 수 있다.(컨테이너 애플리케이션의 실행이 끝나도 재실행할 수 있는 등, 컨테이너가 종료되는 것은 아니다.)
 
-#### 1-3. Docker Image 빌드 및 실행
+#### 1-3. Docker Image 빌드/실행 초간단 실습
 1. __Docker Image 빌드__
     1) 실습 디렉토리 docker-practices/docker-basics/Ch01. Basic Concept/helloworld 만들기
     
